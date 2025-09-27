@@ -55,7 +55,7 @@ export default function ProtectedPage({ children, title = "لوحة التحكم
           onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           isSidebarCollapsed={isSidebarCollapsed}
         />
-        <main className="flex-1 overflow-visible bg-gray-50 relative z-10">
+        <main className="flex-1 overflow-visible bg-gray-50 relative z-0">
           {children}
         </main>
       </div>

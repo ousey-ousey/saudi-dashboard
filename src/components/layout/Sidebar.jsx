@@ -159,13 +159,14 @@ export default function Sidebar({ isCollapsed = true }) {
 
   return (
     <aside
-      className={`relative min-h-[100vh] transition-all duration-300 z-[1000] flex flex-col ${
+      className={`relative min-h-[100vh] transition-all duration-300 flex flex-col ${
         isCollapsed ? "w-20" : "w-70"
       }`}
       style={{
         position: "relative",
         minHeight: "100vh",
-        
+        zIndex: 99999997,
+        overflow: "visible",
         background: `
           radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.404) 0%, transparent 50%),
           radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.322) 0%, transparent 50%),
@@ -202,6 +203,7 @@ export default function Sidebar({ isCollapsed = true }) {
       {/* Navigation List */}
       <ul
         className="list-none p-4 m-0 pt-6 space-y-3 flex-1 overflow-y-auto"
+        style={{ overflow: "visible" }}
         dir="rtl"
       >
         {/* لوحات البيانات */}
@@ -213,6 +215,7 @@ export default function Sidebar({ isCollapsed = true }) {
                   ? "bg-[var(--color-dark)] text-white"
                   : "hover:bg-[var(--color-dark)] hover:text-white focus:bg-[var(--color-dark)] focus:text-white"
               }`}
+              style={{ overflow: "visible" }}
               onFocus={() => handleFocus("dashboards")}
               onBlur={handleBlur}
               tabIndex={0}
@@ -226,7 +229,12 @@ export default function Sidebar({ isCollapsed = true }) {
             >
               <MdSettings className="w-5 h-5" />
               <div
-                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[999999] mr-2 shadow-lg"
+                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mr-2 shadow-lg"
+                style={{
+                  zIndex: 99999999,
+                  position: "absolute",
+                  pointerEvents: "auto",
+                }}
                 data-tooltip="true"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -319,13 +327,19 @@ export default function Sidebar({ isCollapsed = true }) {
                   ? "bg-[var(--color-dark)] text-white"
                   : "hover:bg-[var(--color-dark)] hover:text-white focus:bg-[var(--color-dark)] focus:text-white"
               }`}
+              style={{ overflow: "visible" }}
               onFocus={() => handleFocus("new-request")}
               onBlur={handleBlur}
               tabIndex={0}
             >
               <MdAddCircleOutline className="w-5 h-5" />
               <div
-                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[999999] mr-2 shadow-lg"
+                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mr-2 shadow-lg"
+                style={{
+                  zIndex: 99999999,
+                  position: "absolute",
+                  pointerEvents: "auto",
+                }}
                 data-tooltip="true"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -361,6 +375,7 @@ export default function Sidebar({ isCollapsed = true }) {
                   ? "bg-[var(--color-dark)] text-white"
                   : "hover:bg-[var(--color-dark)] hover:text-white focus:bg-[var(--color-dark)] focus:text-white"
               }`}
+              style={{ overflow: "visible" }}
               onFocus={() => handleFocus("projects")}
               onBlur={handleBlur}
               tabIndex={0}
@@ -374,7 +389,12 @@ export default function Sidebar({ isCollapsed = true }) {
             >
               <MdAssignment className="w-5 h-5" />
               <div
-                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[999999] mr-2 shadow-lg"
+                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mr-2 shadow-lg"
+                style={{
+                  zIndex: 99999999,
+                  position: "absolute",
+                  pointerEvents: "auto",
+                }}
                 data-tooltip="true"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -475,7 +495,12 @@ export default function Sidebar({ isCollapsed = true }) {
             >
               <MdCalendarToday className="w-5 h-5" />
               <div
-                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[999999] mr-2 shadow-lg"
+                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mr-2 shadow-lg"
+                style={{
+                  zIndex: 99999999,
+                  position: "absolute",
+                  pointerEvents: "auto",
+                }}
                 data-tooltip="true"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -524,7 +549,12 @@ export default function Sidebar({ isCollapsed = true }) {
             >
               <MdEmail className="w-5 h-5" />
               <div
-                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[999999] mr-2 shadow-lg"
+                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mr-2 shadow-lg"
+                style={{
+                  zIndex: 99999999,
+                  position: "absolute",
+                  pointerEvents: "auto",
+                }}
                 data-tooltip="true"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -634,7 +664,12 @@ export default function Sidebar({ isCollapsed = true }) {
             >
               <MdStar className="w-5 h-5" />
               <div
-                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[999999] mr-2 shadow-lg"
+                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mr-2 shadow-lg"
+                style={{
+                  zIndex: 99999999,
+                  position: "absolute",
+                  pointerEvents: "auto",
+                }}
                 data-tooltip="true"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -744,7 +779,12 @@ export default function Sidebar({ isCollapsed = true }) {
             >
               <MdScale className="w-5 h-5" />
               <div
-                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[999999] mr-2 shadow-lg"
+                className="absolute right-full top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mr-2 shadow-lg"
+                style={{
+                  zIndex: 99999999,
+                  position: "absolute",
+                  pointerEvents: "auto",
+                }}
                 data-tooltip="true"
                 onClick={(e) => e.stopPropagation()}
               >

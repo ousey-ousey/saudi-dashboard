@@ -17,13 +17,16 @@ export default function UserProfileModal({ isOpen, onClose }) {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/70  z-10000000"
-        style={{ background: "blur(5px)" }}
+        className="fixed inset-0 bg-black/70"
+        style={{ background: "blur(5px)", zIndex: 99999998 }}
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="fixed top-16 left-10  rounded-2xl shadow-xl z-10000001 min-w-[300px]">
+      <div
+        className="fixed top-16 left-10  rounded-2xl shadow-xl min-w-[300px]"
+        style={{ zIndex: 99999999 }}
+      >
         {/* Header */}
         <div
           className="p-4 rounded-t-3xl bg-gradient-to-r from-green-500 to-green-700 text-white"

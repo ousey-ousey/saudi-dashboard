@@ -48,7 +48,7 @@ export default function Header({ title, onToggleSidebar, isSidebarCollapsed }) {
           </button>
         </div>
         {/* Center - Page Title */}
-        <h1 className="text-xl font-semibold text-white text-center">
+        <h1 className="text-sm sm:text-xl font-semibold text-white text-center">
           {title}
         </h1>
         {/* Left - Settings Gear */}

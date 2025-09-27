@@ -216,7 +216,7 @@ const InputGroup = styled.div`
 const StyledInput = styled.input`
   background: var(--color-dark) !important;
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 1rem;
   flex: 1;
   padding: 1rem;
   margin-left: 1rem;

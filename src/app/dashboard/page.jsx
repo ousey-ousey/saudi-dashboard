@@ -5,6 +5,16 @@ import ProtectedPage from "../../components/auth/ProtectedPage";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 // Dynamically import Chart to avoid SSR issues
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -26,11 +36,9 @@ import {
 
 // Legend styling variables
 const LEGEND_STYLES = {
-  container:
-    "grid grid-cols-3  direction-rtl sm:grid-cols-3  gap-1 sm:gap-3 mt-2 sm:mt-3",
-  item: "flex items-center gap-2 sm:gap-1 text-xs direction",
-  dot: "w-1 h-1 sm:w-2 sm:h-2 rounded-full flex-shrink-0",
-  text: "text-slate-300 text-right flex-1 text-[.5rem] ",
+  container: "grid grid-cols-2 sm:grid-cols-3 gap-1 sm:gap-2 mt-2 sm:mt-3",
+  item: "flex items-center gap-1 sm:gap-2 text-xs",
+  text: "text-right flex-1 text-[.5rem] sm:text-[.6rem]",
 };
 
 // Styled Components for Tooltips
@@ -38,14 +46,14 @@ const TooltipContainer = styled.div`
   position: relative;
   display: inline-block;
 
-  &:hover .tooltip {
+  &:hover .custom-tooltip {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
   }
 `;
 
-const Tooltip = styled.div`
+const CustomTooltip = styled.div`
   position: absolute;
   top: 100%;
   left: 50%;
@@ -76,9 +84,17 @@ const Tooltip = styled.div`
 `;
 
 // Small Donut Component
-const SmallDonutCard = ({ title, series, labels, centerValue, colors }) => (
+const SmallDonutCard = ({
+  title,
+  series,
+  labels,
+  centerValue,
+  colors,
+  icon,
+}) => (
   <div className="border border-white/10 rounded-lg p-1 sm:p-2 bg-slate-800 w-full ">
-    <div className="text-xs font-semibold text-white mb-1 sm:mb-2 text-center truncate">
+    <div className="text-xs font-semibold text-white mb-1 sm:mb-2 text-center truncate flex items-center justify-center gap-1">
+      {icon}
       {title}
     </div>
     <div className="relative h-20 sm:h-24 w-full">
@@ -174,22 +190,162 @@ export default function Dashboard() {
     dataLabels: { enabled: false },
   };
 
-  // Geographical Distribution Data
-  const geographicalDistributionSeries = [
-    { name: "الورد", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    { name: "المواشي", data: [0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 2, 4, 4] },
+  // Geographical Distribution Data for Recharts
+  const geographicalDistributionData = [
     {
-      name: "المحاصيل البعليه",
-      data: [0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 2, 2, 3, 3],
+      name: "الجوف",
+      الورد: 0,
+      المواشي: 0,
+      "المحاصيل البعليه": 0,
+      "القيمة المضافة": 0,
+      الفاكهة: 0,
+      العسل: 1,
+      "البن العربي": 0,
+      الاسماك: 0,
     },
     {
-      name: "القيمة المضافة",
-      data: [0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 2],
+      name: "تبوك",
+      الورد: 0,
+      المواشي: 0,
+      "المحاصيل البعليه": 1,
+      "القيمة المضافة": 0,
+      الفاكهة: 1,
+      العسل: 1,
+      "البن العربي": 1,
+      الاسماك: 1,
     },
-    { name: "الفاكهة", data: [0, 1, 1, 1, 0, 0, 0, 1, 1, 2, 1, 2, 3, 2] },
-    { name: "العسل", data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 4, 3] },
-    { name: "البن العربي", data: [0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 2, 1, 3, 2] },
-    { name: "الاسماك", data: [0, 1, 1, 2, 1, 0, 1, 1, 1, 1, 3, 2, 5, 3] },
+    {
+      name: "الباحة",
+      الورد: 0,
+      المواشي: 0,
+      "المحاصيل البعليه": 1,
+      "القيمة المضافة": 0,
+      الفاكهة: 1,
+      العسل: 1,
+      "البن العربي": 0,
+      الاسماك: 1,
+    },
+    {
+      name: "عسير",
+      الورد: 0,
+      المواشي: 0,
+      "المحاصيل البعليه": 1,
+      "القيمة المضافة": 1,
+      الفاكهة: 1,
+      العسل: 1,
+      "البن العربي": 1,
+      الاسماك: 2,
+    },
+    {
+      name: "الحدود الشمالية",
+      الورد: 0,
+      المواشي: 1,
+      "المحاصيل البعليه": 1,
+      "القيمة المضافة": 1,
+      الفاكهة: 0,
+      العسل: 1,
+      "البن العربي": 0,
+      الاسماك: 1,
+    },
+    {
+      name: "القصيم",
+      الورد: 0,
+      المواشي: 0,
+      "المحاصيل البعليه": 1,
+      "القيمة المضافة": 1,
+      الفاكهة: 0,
+      العسل: 1,
+      "البن العربي": 0,
+      الاسماك: 0,
+    },
+    {
+      name: "حائل",
+      الورد: 0,
+      المواشي: 0,
+      "المحاصيل البعليه": 1,
+      "القيمة المضافة": 0,
+      الفاكهة: 0,
+      العسل: 1,
+      "البن العربي": 0,
+      الاسماك: 1,
+    },
+    {
+      name: "نجران",
+      الورد: 0,
+      المواشي: 1,
+      "المحاصيل البعليه": 0,
+      "القيمة المضافة": 0,
+      الفاكهة: 1,
+      العسل: 1,
+      "البن العربي": 1,
+      الاسماك: 1,
+    },
+    {
+      name: "المدينة المنورة",
+      الورد: 0,
+      المواشي: 1,
+      "المحاصيل البعليه": 1,
+      "القيمة المضافة": 1,
+      الفاكهة: 1,
+      العسل: 1,
+      "البن العربي": 1,
+      الاسماك: 1,
+    },
+    {
+      name: "المنطقة الشرقية",
+      الورد: 0,
+      المواشي: 1,
+      "المحاصيل البعليه": 1,
+      "القيمة المضافة": 1,
+      الفاكهة: 2,
+      العسل: 2,
+      "البن العربي": 1,
+      الاسماك: 1,
+    },
+    {
+      name: "مكة المكرمة",
+      الورد: 0,
+      المواشي: 1,
+      "المحاصيل البعليه": 2,
+      "القيمة المضافة": 1,
+      الفاكهة: 1,
+      العسل: 3,
+      "البن العربي": 2,
+      الاسماك: 3,
+    },
+    {
+      name: "الرياض",
+      الورد: 0,
+      المواشي: 2,
+      "المحاصيل البعليه": 2,
+      "القيمة المضافة": 1,
+      الفاكهة: 2,
+      العسل: 2,
+      "البن العربي": 1,
+      الاسماك: 2,
+    },
+    {
+      name: "مناطق المملكة",
+      الورد: 0,
+      المواشي: 4,
+      "المحاصيل البعليه": 3,
+      "القيمة المضافة": 2,
+      الفاكهة: 3,
+      العسل: 4,
+      "البن العربي": 3,
+      الاسماك: 5,
+    },
+    {
+      name: "جازان",
+      الورد: 0,
+      المواشي: 4,
+      "المحاصيل البعليه": 3,
+      "القيمة المضافة": 2,
+      الفاكهة: 2,
+      العسل: 3,
+      "البن العربي": 2,
+      الاسماك: 3,
+    },
   ];
 
   // Sector Distribution Data
@@ -331,7 +487,7 @@ export default function Dashboard() {
     return (
       <ProtectedPage title="لوحة بيانات المشاريع">
         <div
-          className="p-2 sm:p-4 lg:p-6 overflow-visible flex items-center justify-center min-h-screen"
+          className="p-2 sm:p-4 lg:p-6  flex items-center justify-center min-h-screen"
           dir="rtl"
           style={{
             background: "linear-gradient(-2deg, #023002, #0f172a)",
@@ -345,108 +501,153 @@ export default function Dashboard() {
 
   return (
     <ProtectedPage title="لوحة بيانات المشاريع">
+      <style jsx>{`
+        * {
+          outline: none !important;
+        }
+        *:focus {
+          outline: none !important;
+        }
+        svg {
+          outline: none !important;
+        }
+        svg:focus {
+          outline: none !important;
+        }
+        .recharts-wrapper {
+          outline: none !important;
+        }
+        .recharts-wrapper:focus {
+          outline: none !important;
+        }
+      `}</style>
       <div
-        className="p-2 sm:p-4 lg:p-6 overflow-visible"
-        dir="rtl"
+        className="p-2 sm:p-4 lg:p-6 overflow-visible "
+        dir="ltr"
         style={{
           background: "linear-gradient(-2deg, #023002, #0f172a)",
         }}
       >
         {/* Main Grid Container - Matching the original grid structure */}
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 w-full"
+          className="flex flex-col gap-3 sm:gap-4 lg:gap-6 w-full md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
           style={{
             gridTemplateAreas: `
-              "distripution firstcharts secondcharts thiardcharts timeline timeline"
-              "distripution firstcharts secondcharts thiardcharts achiveandabstract achiveandabstract"
+              "distripution distripution firstcharts secondcharts thiardcharts timeline"
+              "distripution distripution firstcharts secondcharts thiardcharts achiveandabstract"
               "qualitycheck qualitycheck budget budget budget posibilityanddanger"
               "qualitycheck qualitycheck lineofhalfyearsandstate lineofhalfyearsandstate lineofhalfyearsandstate posibilityanddanger"
             `,
+            gridTemplateRows: "0.5fr 0.5fr 1fr 1fr",
           }}
         >
           {/* Geographical Distribution - distripution */}
           <div
-            className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[300px] sm:min-h-[400px]"
-            style={{ gridArea: "distripution" }}
+            className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 h-[400px] sm:min-h-[400px]"
+            style={{
+              gridArea: "distripution",
+              height: "-webkit-fill-available",
+              minHeight: "400px",
+              width: "-webkit-fill-available",
+            }}
           >
             <motion.h3 className="text-xs  font-semibold text-white mb-10  flex items-center justify-center gap-1">
               <BarChart3 size={14} />
               التوزيع الجغرافي للمشاريع
             </motion.h3>
-            <div className="h-full w-full mx-auto">
-              <Chart
-                options={{
-                  ...chartOptions,
-                  chart: {
-                    ...chartOptions.chart,
-                    type: "bar",
-                    stacked: true,
-                    background: "transparent",
-                  },
-                  plotOptions: {
-                    bar: {
-                      horizontal: true,
-                      barHeight: "80%",
-                      borderRadius: 4,
-                    },
-                  },
-                  xaxis: {
-                    categories: [
-                      "الجوف",
-                      "تبوك",
-                      "الباحة",
-                      "عسير",
-                      "الحدود الشمالية",
-                      "القصيم",
-                      "حائل",
-                      "نجران",
-                      "المدينة المنورة",
-                      "المنطقة الشرقية",
-                      "مكة المكرمة",
-                      "الرياض",
-                      "مناطق المملكة",
-                      "جازان",
-                    ],
-                    labels: {
-                      style: { colors: "#ffffff", fontSize: "7px" },
-                    },
-                  },
-                  yaxis: {
-                    labels: {
-                      style: { colors: "#ffffff", fontSize: "8px" },
-                    },
-                  },
-                  grid: {
-                    borderColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                  legend: {
-                    ...chartOptions.legend,
-                    position: "bottom",
-                    itemMargin: { horizontal: 5, vertical: 0 },
-                    markers: { width: 5, height: 5 },
-                    fontSize: "7px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "10px",
+            <div
+              className=" h-[23rem] sm:h-full w-full"
+              style={{
+                outline: "none",
+                WebkitTapHighlightColor: "transparent",
+                WebkitFocusRingColor: "transparent",
+              }}
+            >
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+                className={" h-[23rem] sm:h-full"}
+                style={{
+                  "& svg": {
+                    outline: "none",
+                    border: "none",
+                    width: "148px",
+                    height: "-webkit-fill-available",
+                    outline: "none",
                   },
                 }}
-                series={geographicalDistributionSeries}
-                type="bar"
-                height="80%"
-                width="100%"
-              />
+              >
+                <BarChart
+                  data={geographicalDistributionData}
+                  margin={{
+                    top: 5,
+                    right: 5,
+                    left: 5,
+                    bottom: 5,
+                  }}
+                  style={{ outline: "none" }}
+                  className="h-[23rem] sm:h-full"
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255, 255, 255, 0.1)"
+                  />
+                  <XAxis
+                    dataKey="name"
+                    tick={{
+                      fill: "#ffffff",
+                      fontSize: 6,
+                      fontWeight: 600,
+                      outline: "none",
+                    }}
+                    angle={-20}
+                    textAnchor="end"
+                    height={70}
+                  />
+                  <YAxis
+                    tick={{ fill: "#ffffff", fontSize: 7 }}
+                    label={{
+                      value: "العدد",
+                      angle: -90,
+                      position: "insideTop",
+                      style: {
+                        textAnchor: "middle",
+                        fill: "#ffffff",
+                        fontSize: 7,
+                      },
+                    }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1e293b",
+                      border: "1px solid #374151",
+                      borderRadius: "6px",
+                      color: "#ffffff",
+                    }}
+                  />
+                  <Bar dataKey="الورد" stackId="a" fill="#63ff0385" />
+                  <Bar dataKey="المواشي" stackId="a" fill="#f59e0b" />
+                  <Bar dataKey="المحاصيل البعليه" stackId="a" fill="#fbbf24" />
+                  <Bar dataKey="القيمة المضافة" stackId="a" fill="#fde047" />
+                  <Bar dataKey="الفاكهة" stackId="a" fill="#86efac" />
+                  <Bar dataKey="العسل" stackId="a" fill="#22c55e" />
+                  <Bar dataKey="البن العربي" stackId="a" fill="#ef4444" />
+                  <Bar dataKey="الاسماك" stackId="a" fill="#f97316" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
 
           {/* Sector Distribution - firstcharts */}
           <div
             className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[300px]"
-            style={{ gridArea: "firstcharts" }}
+            style={{
+              gridArea: "firstcharts",
+              height: "-webkit-fill-available",
+            }}
           >
             <motion.h3 className="text-xs  font-semibold text-white mb-10 flex items-center justify-center gap-1">
-              <BarChart3 size={14} />
+              <Activity className="w-4 h-4 text-purple-400" />
               توزيع المشاريع بالقطاعات
             </motion.h3>
             <div className="space-y-3 ">
@@ -464,13 +665,13 @@ export default function Dashboard() {
                       plotOptions: {
                         pie: {
                           donut: {
-                            size: "70%",
+                            size: "76%",
                             labels: {
                               show: true,
                               total: {
                                 show: true,
                                 label: "المجموع",
-                                fontSize: ".6rem",
+                                fontSize: ".7rem",
                                 fontWeight: 500,
                                 transform: "translateY(-0.5rem)",
                                 color: "#ffffff",
@@ -485,7 +686,7 @@ export default function Dashboard() {
                       dataLabels: {
                         enabled: false,
                         style: {
-                          fontSize: "0.8rem",
+                          fontSize: "0.7rem",
                           fontFamily: "Cairo, sans-serif",
                           fontWeight: 600,
                         },
@@ -493,7 +694,7 @@ export default function Dashboard() {
                       tooltip: {
                         ...chartOptions.tooltip,
                         style: {
-                          fontSize: "0.9rem",
+                          fontSize: "0.7rem",
                           fontFamily: "Cairo, sans-serif",
                         },
                       },
@@ -516,7 +717,7 @@ export default function Dashboard() {
                       plotOptions: {
                         pie: {
                           donut: {
-                            size: "70%",
+                            size: "76%",
                             labels: {
                               show: true,
                               total: {
@@ -533,7 +734,7 @@ export default function Dashboard() {
                                   const total = w.globals.seriesTotals.reduce(
                                     (a, b) => a + b
                                   );
-                                  return (total / 1000).toFixed(1) + " B";
+                                  return (total / 1000).toFixed(1) + "B";
                                 },
                               },
                             },
@@ -546,7 +747,7 @@ export default function Dashboard() {
                         ...chartOptions.tooltip,
                         y: {
                           formatter: function (val) {
-                            return val.toFixed(0) + " M";
+                            return val.toFixed(0) + "M";
                           },
                         },
                       },
@@ -562,14 +763,15 @@ export default function Dashboard() {
             <div className={LEGEND_STYLES.container}>
               {sectorDistributionLabels.map((label, index) => (
                 <div key={label} className={LEGEND_STYLES.item}>
-                  <div
-                    className={LEGEND_STYLES.dot}
+                  <span
+                    className={LEGEND_STYLES.text}
                     style={{
-                      backgroundColor:
+                      color:
                         chartOptions.colors[index % chartOptions.colors.length],
                     }}
-                  ></div>
-                  <span className={LEGEND_STYLES.text}>{label}</span>
+                  >
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -578,10 +780,13 @@ export default function Dashboard() {
           {/* Project Stages - secondcharts */}
           <div
             className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[300px]"
-            style={{ gridArea: "secondcharts" }}
+            style={{
+              gridArea: "secondcharts",
+              height: "-webkit-fill-available",
+            }}
           >
             <motion.h3 className="text-xs  font-semibold text-white mb-10  flex items-center justify-center gap-1">
-              <BarChart3 size={14} />
+              <GitCommit className="w-4 h-4 text-cyan-400" />
               توزيع مراحل المشاريع
             </motion.h3>
             <div className="space-y-3">
@@ -595,7 +800,7 @@ export default function Dashboard() {
                       plotOptions: {
                         pie: {
                           donut: {
-                            size: "70%",
+                            size: "76%",
                             labels: {
                               show: true,
                               total: {
@@ -632,7 +837,7 @@ export default function Dashboard() {
                       plotOptions: {
                         pie: {
                           donut: {
-                            size: "70%",
+                            size: "76%",
                             labels: {
                               show: true,
                               total: {
@@ -648,7 +853,7 @@ export default function Dashboard() {
                                   const total = w.globals.seriesTotals.reduce(
                                     (a, b) => a + b
                                   );
-                                  return (total / 1000).toFixed(1) + " B";
+                                  return (total / 1000).toFixed(1) + "B";
                                 },
                               },
                             },
@@ -661,7 +866,7 @@ export default function Dashboard() {
                         ...chartOptions.tooltip,
                         y: {
                           formatter: function (val) {
-                            return val.toFixed(0) + " M";
+                            return val.toFixed(0) + "M";
                           },
                         },
                       },
@@ -677,14 +882,15 @@ export default function Dashboard() {
             <div className={LEGEND_STYLES.container}>
               {projectStagesLabels.map((label, index) => (
                 <div key={label} className={LEGEND_STYLES.item}>
-                  <div
-                    className={LEGEND_STYLES.dot}
+                  <span
+                    className={LEGEND_STYLES.text}
                     style={{
-                      backgroundColor:
+                      color:
                         chartOptions.colors[index % chartOptions.colors.length],
                     }}
-                  ></div>
-                  <span className={LEGEND_STYLES.text}>{label}</span>
+                  >
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -693,10 +899,13 @@ export default function Dashboard() {
           {/* Project Types - thiardcharts */}
           <div
             className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[300px]"
-            style={{ gridArea: "thiardcharts" }}
+            style={{
+              gridArea: "thiardcharts",
+              height: "-webkit-fill-available",
+            }}
           >
             <motion.h3 className="text-xs  font-semibold text-white mb-10  flex items-center justify-center gap-1">
-              <Building size={14} />
+              <Users className="w-4 h-4 text-orange-400" />
               توزيع أنواع المشاريع
             </motion.h3>
             <div className="space-y-3">
@@ -710,7 +919,7 @@ export default function Dashboard() {
                       plotOptions: {
                         pie: {
                           donut: {
-                            size: "70%",
+                            size: "76%",
                             labels: {
                               show: true,
                               total: {
@@ -747,7 +956,7 @@ export default function Dashboard() {
                       plotOptions: {
                         pie: {
                           donut: {
-                            size: "70%",
+                            size: "76%",
                             labels: {
                               show: true,
                               total: {
@@ -762,7 +971,7 @@ export default function Dashboard() {
                                   const total = w.globals.seriesTotals.reduce(
                                     (a, b) => a + b
                                   );
-                                  return (total / 1000).toFixed(1) + " B";
+                                  return (total / 1000).toFixed(1) + "B";
                                 },
                               },
                             },
@@ -775,7 +984,7 @@ export default function Dashboard() {
                         ...chartOptions.tooltip,
                         y: {
                           formatter: function (val) {
-                            return val.toFixed(0) + " M";
+                            return val.toFixed(0) + "M";
                           },
                         },
                       },
@@ -791,89 +1000,62 @@ export default function Dashboard() {
             <div className={LEGEND_STYLES.container}>
               {projectTypesLabels.map((label, index) => (
                 <div key={label} className={LEGEND_STYLES.item}>
-                  <div
-                    className={LEGEND_STYLES.dot}
+                  <span
+                    className={LEGEND_STYLES.text}
                     style={{
-                      backgroundColor:
+                      color:
                         chartOptions.colors[index % chartOptions.colors.length],
                     }}
-                  ></div>
-                  <span className={LEGEND_STYLES.text}>{label}</span>
+                  >
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Timeline - timeline */}
+          {/* abstract and summary - timeline */}
           <div
-            className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[20%]"
-            style={{ gridArea: "timeline" }}
+            className="bg-slate-800 rounded-lg p-2  min-h-[20%]"
+            style={{
+              gridArea: "timeline",
+              height: "-webkit-fill-available",
+              direction: "rtl",
+            }}
           >
-            <motion.h3 className="text-xs sm:text-sm font-semibold text-white mb-4 text-right justify-end flex items-center gap-2">
-              <Clock size={14} />
-              الخط الزمني للبرنامج
-            </motion.h3>
-            <div className="relative mt-[4rem] h-12 mx-2 bg-gradient-to-r from-green-800 to-red-800 rounded-full flex items-center ">
-              <div className="absolute left-[-4%] top-8 text-xs text-white font-semibold text-center">
-                البداية
-                <br />
-                2021
+            <div className="w-full h-full flex flex-col justify-center items-center mt-2">
+              <h4 className="text-xs sm:text-sm font-semibold text-white mt-1 flex items-center gap-1">
+                <FileText className="w-3 h-3 text-indigo-400" />
+                ملخص تنفيذي
+              </h4>
+              <div className="p-2 rounded-lg text-xs text-slate-200 space-y-2 h-full">
+                <p className="flex items-start gap-1 pb-3 sm:pb-5 border-b border-black/70">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0"></span>
+                  تم تسليم 6 أراضي مخصصين لقطاعات الأسماك والورد والماشية
+                </p>
+                <p className="flex items-start gap-1 pb-3 sm:pb-5 border-b border-black/70">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0"></span>
+                  تم تسليم 6 أراضي مخصصين لقطاعات الأسماك والورد والماشية
+                </p>
+                <p className="flex items-start gap-1 pb-3 sm:pb-5">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0"></span>
+                  تم تسليم 6 أراضي مخصصين لقطاعات الأسماك والورد والماشية
+                </p>
               </div>
-              <div className="absolute left-3/4 top-5 w-2 h-2 bg-yellow-400 rounded-full border border-white"></div>
-              <div className="absolute left-[68%] top-8 text-xs text-yellow-400 font-semibold text-center">
-                الوقت الحالي
-                <br />
-                2025
-              </div>
-              <div className="absolute right-[-4%] top-8 text-xs text-white font-semibold text-center">
-                النهاية
-                <br />
-                2026
-              </div>
-              <div className=" absolute top-[-25px] left-0 right-0 flex flex-row justify-between px-4">
-                {[2026, 2025, 2024, 2023, 2022, 2021].map((year) => (
-                  <span
-                    key={year}
-                    className={`text-xs ${
-                      year === 2025
-                        ? "font-semibold text-yellow-400"
-                        : "text-slate-400"
-                    }`}
-                  >
-                    {year}
-                  </span>
-                ))}
-              </div>
-            </div>
+            </div>{" "}
           </div>
-
-          {/* Executive Summary & Completion - achiveandabstract */}
+          {/* achiveandabstract */}
           <div
-            className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[200px]"
-            style={{ gridArea: "achiveandabstract", direction: "rtl" }}
+            className="bg-slate-800 rounded-lg p-3  border border-gray-700 min-h-[200px]"
+            style={{
+              gridArea: "achiveandabstract",
+              direction: "rtl",
+              height: "-webkit-fill-available",
+              width: "-webkit-fill-available",
+            }}
           >
-            <div className="flex gap-4 h-full ">
-              <div className="w-2/5 mt-7 flex flex-col justify-center items-center  ">
-                <h4 className="text-xs sm:text-sm font-semibold text-white mb-2">
-                  ملخص تنفيذي
-                </h4>
-                <div className=" p-2 rounded-lg text-xs text-slate-200 space-y-2 h-full">
-                  <p className="flex items-start gap-1 pb-5 border-b-1 border-b-black/70">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0"></span>
-                    تم تسليم 6 أراضي مخصصين لقطاعات الأسماك والورد والماشية
-                  </p>
-                  <p className="flex items-start gap-1 pb-5 border-b-1 border-b-black/70">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0"></span>
-                    تم تسليم 6 أراضي مخصصين لقطاعات الأسماك والورد والماشية
-                  </p>
-                  <p className="flex items-start gap-1 pb-5">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0"></span>
-                    تم تسليم 6 أراضي مخصصين لقطاعات الأسماك والورد والماشية
-                  </p>
-                </div>
-              </div>
-              <div className="w-3/5 flex flex-col justify-space-between items-center">
-                <h4 className="text-xs sm:text-sm font-bold text-white mb-2 text-center">
+            <div className="flex flex-col lg:flex-row gap-4 h-full">
+              <div className="w-full  flex flex-col justify-space-between items-center">
+                <h4 className="text-xs  font-semibold text-white mb-2 text-center">
                   نسبة الانجاز الفعلية للبرنامج
                 </h4>
                 <div className="flex flex-col items-center justify-space-between">
@@ -911,21 +1093,20 @@ export default function Dashboard() {
                       height="100%"
                     />
                   </div>
-                  <div className="flex gap-4 flex-column mt-2">
-                    <div
-                      className="flex bg-red-500/20 rounded-2xl flex-col border-1-red-200 p-5 items-center justify-center "
-                      style={{ flexDirection: "column" }}
-                    >
-                      <div className="text-xs text-red-500">
+                  <div className="flex flex-row  gap-2 sm:gap-4 mt-1 w-full">
+                    <div className="flex text-center bg-red-500/10 rounded-2xl flex-col border border-red-200/20 p-3  items-center justify-center flex-1">
+                      <div className="text-[.7rem] text-red-500">
                         نسبة الحياد الناتج
                       </div>
-                      <div className="text-sm text-red-500 font-bold">-4%</div>
+                      <div className="text-[.7rem] text-center text-red-100 font-bold">
+                        -4%
+                      </div>
                     </div>
-                    <div className="flex bg-blue-500/20 rounded-2xl flex-col border-1-red-200 p-5 items-center justify-center ">
-                      <div className="text-xs text-green-500">
+                    <div className="flex bg-blue-500/10 rounded-2xl flex-col border border-blue-200/20 p-3  items-center justify-center flex-1">
+                      <div className="text-[.7rem] text-center text-green-500">
                         نسبة الانجاز المخطط
                       </div>
-                      <div className="text-sm text-green-500 font-bold">
+                      <div className="text-[.7rem] text-center text-green-100 font-bold">
                         32%
                       </div>
                     </div>
@@ -938,7 +1119,10 @@ export default function Dashboard() {
           {/* Quality Statistics - qualitycheck */}
           <div
             className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[300px] overflow-hidden"
-            style={{ gridArea: "qualitycheck" }}
+            style={{
+              gridArea: "qualitycheck",
+              height: "-webkit-fill-available",
+            }}
           >
             <motion.h3 className="text-xs sm:text-sm font-semibold text-white mb-[4rem] flex items-center justify-center gap-1">
               <Zap size={14} />
@@ -960,128 +1144,133 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-2 sm:gap-3 w-full">
-              {/* First Row */}
-              <div className="flex flex-row gap-2 sm:gap-3 justify-center items-center w-full">
-                <div className="flex-1 rounded-lg p-1 sm:p-2 min-w-0">
-                  <SmallDonutCard
-                    title="استلام الأعمال"
-                    series={workReceiptsSeries}
-                    labels={workReceiptsLabels}
-                    centerValue="5595"
-                  />
-                  {/* Legend for Work Receipts */}
-                  <div className={LEGEND_STYLES.container}>
-                    {workReceiptsLabels.map((label, index) => (
-                      <div key={label} className={LEGEND_STYLES.item}>
-                        <div
-                          className={LEGEND_STYLES.dot}
-                          style={{
-                            backgroundColor: [
-                              "#8b5cf6",
-                              "#f59e0b",
-                              "#fbbf24",
-                              "#86efac",
-                              "#22c55e",
-                              "#ef4444",
-                            ][index % 6],
-                          }}
-                        ></div>
-                        <span className={LEGEND_STYLES.text}>{label}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex-1 rounded-lg p-1 sm:p-2 min-w-0">
-                  <SmallDonutCard
-                    title="الاعتمادات الفنية"
-                    series={technicalApprovalsSeries}
-                    labels={technicalApprovalsLabels}
-                    centerValue="7715"
-                  />
-                  {/* Legend for Technical Approvals */}
-                  <div className={LEGEND_STYLES.container}>
-                    {technicalApprovalsLabels.map((label, index) => (
-                      <div key={label} className={LEGEND_STYLES.item}>
-                        <div
-                          className={LEGEND_STYLES.dot}
-                          style={{
-                            backgroundColor: [
-                              "#8b5cf6",
-                              "#f59e0b",
-                              "#fbbf24",
-                              "#86efac",
-                              "#22c55e",
-                              "#ef4444",
-                            ][index % 6],
-                          }}
-                        ></div>
-                        <span className={LEGEND_STYLES.text}>{label}</span>
-                      </div>
-                    ))}
-                  </div>
+            {/* Responsive Grid for Quality Charts */}
+            <div className="grid grid-cols-1 gap-2 sm:gap-3 w-full">
+              <div className="rounded-lg p-1 sm:p-2 min-w-0">
+                <SmallDonutCard
+                  title="استلام الأعمال"
+                  series={workReceiptsSeries}
+                  labels={workReceiptsLabels}
+                  centerValue="5595"
+                  icon={<CheckCircle className="w-3 h-3 text-green-400" />}
+                />
+                {/* Legend for Work Receipts */}
+                <div className={LEGEND_STYLES.container}>
+                  {workReceiptsLabels.map((label, index) => (
+                    <div key={label} className={LEGEND_STYLES.item}>
+                      <span
+                        className={LEGEND_STYLES.text}
+                        style={{
+                          color: [
+                            "#8b5cf6",
+                            "#f59e0b",
+                            "#fbbf24",
+                            "#86efac",
+                            "#22c55e",
+                            "#ef4444",
+                          ][index % 6],
+                        }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Second Row */}
-              <div className="flex flex-row gap-2 sm:gap-3 justify-center items-center w-full">
-                <div className="flex-1 rounded-lg p-1 sm:p-2 min-w-0">
-                  <SmallDonutCard
-                    title="اوامر التغيير"
-                    series={changeOrdersSeries}
-                    labels={changeOrdersLabels}
-                    centerValue="16"
-                  />
-                  {/* Legend for Change Orders */}
-                  <div className={LEGEND_STYLES.container}>
-                    {changeOrdersLabels.map((label, index) => (
-                      <div key={label} className={LEGEND_STYLES.item}>
-                        <div
-                          className={LEGEND_STYLES.dot}
-                          style={{
-                            backgroundColor: [
-                              "#8b5cf6",
-                              "#f59e0b",
-                              "#fbbf24",
-                              "#86efac",
-                              "#22c55e",
-                              "#ef4444",
-                            ][index % 6],
-                          }}
-                        ></div>
-                        <span className={LEGEND_STYLES.text}>{label}</span>
-                      </div>
-                    ))}
-                  </div>
+              <div className="rounded-lg p-1 sm:p-2 min-w-0">
+                <SmallDonutCard
+                  title="الاعتمادات الفنية"
+                  series={technicalApprovalsSeries}
+                  labels={technicalApprovalsLabels}
+                  centerValue="7715"
+                  icon={<FileText className="w-3 h-3 text-blue-400" />}
+                />
+                {/* Legend for Technical Approvals */}
+                <div className={LEGEND_STYLES.container}>
+                  {technicalApprovalsLabels.map((label, index) => (
+                    <div key={label} className={LEGEND_STYLES.item}>
+                      <span
+                        className={LEGEND_STYLES.text}
+                        style={{
+                          color: [
+                            "#8b5cf6",
+                            "#f59e0b",
+                            "#fbbf24",
+                            "#86efac",
+                            "#22c55e",
+                            "#ef4444",
+                          ][index % 6],
+                        }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex-1 rounded-lg p-1 sm:p-2 min-w-0">
-                  <SmallDonutCard
-                    title="عدم المطابقة"
-                    series={nonConformanceSeries}
-                    labels={nonConformanceLabels}
-                    centerValue="17"
-                  />
-                  {/* Legend for Non-Conformance */}
-                  <div className={LEGEND_STYLES.container}>
-                    {nonConformanceLabels.map((label, index) => (
-                      <div key={label} className={LEGEND_STYLES.item}>
-                        <div
-                          className={LEGEND_STYLES.dot}
-                          style={{
-                            backgroundColor: [
-                              "#8b5cf6",
-                              "#f59e0b",
-                              "#fbbf24",
-                              "#86efac",
-                              "#22c55e",
-                              "#ef4444",
-                            ][index % 6],
-                          }}
-                        ></div>
-                        <span className={LEGEND_STYLES.text}>{label}</span>
-                      </div>
-                    ))}
-                  </div>
+              </div>
+
+              <div className="rounded-lg p-1 sm:p-2 min-w-0">
+                <SmallDonutCard
+                  title="اوامر التغيير"
+                  series={changeOrdersSeries}
+                  labels={changeOrdersLabels}
+                  centerValue="16"
+                  icon={<RefreshCw className="w-3 h-3 text-yellow-400" />}
+                />
+                {/* Legend for Change Orders */}
+                <div className={LEGEND_STYLES.container}>
+                  {changeOrdersLabels.map((label, index) => (
+                    <div key={label} className={LEGEND_STYLES.item}>
+                      <span
+                        className={LEGEND_STYLES.text}
+                        style={{
+                          color: [
+                            "#8b5cf6",
+                            "#f59e0b",
+                            "#fbbf24",
+                            "#86efac",
+                            "#22c55e",
+                            "#ef4444",
+                          ][index % 6],
+                        }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-lg p-1 sm:p-2 min-w-0">
+                <SmallDonutCard
+                  title="عدم المطابقة"
+                  series={nonConformanceSeries}
+                  labels={nonConformanceLabels}
+                  centerValue="17"
+                  icon={<AlertTriangle className="w-3 h-3 text-red-400" />}
+                />
+                {/* Legend for Non-Conformance */}
+                <div className={LEGEND_STYLES.container}>
+                  {nonConformanceLabels.map((label, index) => (
+                    <div key={label} className={LEGEND_STYLES.item}>
+                      <span
+                        className={LEGEND_STYLES.text}
+                        style={{
+                          color: [
+                            "#8b5cf6",
+                            "#f59e0b",
+                            "#fbbf24",
+                            "#86efac",
+                            "#22c55e",
+                            "#ef4444",
+                          ][index % 6],
+                        }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -1090,7 +1279,7 @@ export default function Dashboard() {
           {/* Budget Distribution - budget */}
           <div
             className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[10rem] overflow-visible"
-            style={{ gridArea: "budget" }}
+            style={{ gridArea: "budget", height: "-webkit-fill-available" }}
           >
             <motion.h3 className="text-xs sm:text-sm font-bold text-white mb-4 flex items-center justify-center gap-1">
               <Activity size={14} />
@@ -1167,20 +1356,58 @@ export default function Dashboard() {
               </div>
 
               {/* Legend */}
-              <div className="space-y-2 text-xs flex-row justify-center items-center flex gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
                 {budgetChartSeries.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-center flex-row gap-2 text-[.5rem] cursor-pointer group hover:bg-slate-700/50 px-2 py-1 rounded transition-all duration-200"
+                    className="flex items-center gap-2 text-[.5rem] sm:text-[.6rem] cursor-pointer group hover:bg-slate-700/50 px-2 py-1 rounded transition-all duration-200"
                   >
                     <div
-                      className="w-3 h-3 rounded-full transition-transform duration-200 group-hover:scale-125"
+                      className="w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-transform duration-200 group-hover:scale-125 flex-shrink-0"
                       style={{ backgroundColor: chartOptions.colors[index] }}
                     ></div>
-                    <span className="text-slate-300 group-hover:text-white transition-colors duration-200">
+                    <span className="text-slate-300 group-hover:text-white transition-colors duration-200 text-right">
                       {item.name}
                     </span>
                   </div>
+                ))}
+              </div>
+            </div>
+            {/* Timeline - timeline */}
+
+            <motion.h3 className="text-xs sm:text-sm font-semibold text-white my-4 text-right justify-end flex items-center gap-2">
+              <Clock size={14} />
+              الخط الزمني للبرنامج
+            </motion.h3>
+            <div className="relative mt-[4rem] h-12 mx-2 bg-gradient-to-r from-green-800 to-red-800 rounded-full flex items-center ">
+              <div className="absolute left-[0%] top-8 text-xs text-white font-semibold text-center">
+                البداية
+                <br />
+                2021
+              </div>
+              <div className="absolute left-3/4 top-5 w-2 h-2 bg-yellow-400 rounded-full border border-white"></div>
+              <div className="absolute left-[68%] top-8 text-xs text-yellow-400 font-semibold text-center">
+                الوقت الحالي
+                <br />
+                2025
+              </div>
+              <div className="absolute right-[0%] top-8 text-xs text-white font-semibold text-center">
+                النهاية
+                <br />
+                2026
+              </div>
+              <div className=" absolute top-[-25px] left-0 right-0 flex flex-row justify-between px-4">
+                {[2021, 2022, 2023, 2024, 2025, 2026].map((year) => (
+                  <span
+                    key={year}
+                    className={`text-xs ${
+                      year === 2025
+                        ? "font-semibold text-yellow-400"
+                        : "text-slate-400"
+                    }`}
+                  >
+                    {year}
+                  </span>
                 ))}
               </div>
             </div>
@@ -1189,7 +1416,10 @@ export default function Dashboard() {
           {/* Risk Management - posibilityanddanger */}
           <div
             className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[300px]"
-            style={{ gridArea: "posibilityanddanger" }}
+            style={{
+              gridArea: "posibilityanddanger",
+              height: "-webkit-fill-available",
+            }}
           >
             <motion.h3 className="text-[.7rem] font-semibold text-white mb-3 flex items-center gap-1">
               <AlertTriangle size={14} />
@@ -1235,6 +1465,60 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                    <span className="text-green-400 font-bold">99%</span>
+                    <span className="text-slate-300 text-right flex-1 mr-2">
+                      إعادة محطة تربية الكائنات المائية بـ روابح جازان
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/5 rounded">
                     <span className="text-green-400 font-bold">78%</span>
                     <span className="text-slate-300 text-right flex-1 mr-2">
                       تنفيذ محطات فرز التمور في رياض الخبراء بالقصيم
@@ -1249,7 +1533,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="h-32">
+              <div className="h-40">
                 <Chart
                   options={{
                     ...chartOptions,
@@ -1298,15 +1582,18 @@ export default function Dashboard() {
           {/* Program Timeline Chart - lineofhalfyearsandstate */}
           <div
             className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 min-h-[300px]"
-            style={{ gridArea: "lineofhalfyearsandstate" }}
+            style={{
+              gridArea: "lineofhalfyearsandstate",
+              height: "-webkit-fill-available",
+            }}
           >
             <motion.h3 className="text-xs sm:text-sm font-bold text-white mb-3 flex items-center justify-center gap-1">
               <Clock size={14} />
               الخط الزمني لنسب إنجاز البرنامج
             </motion.h3>
-            <div className="flex gap-4 h-full">
+            <div className="flex flex-col lg:flex-row gap-4 h-full">
               <div className="flex-1">
-                <div className="h-48 sm:h-[80%]">
+                <div className="h-48 sm:h-64 lg:h-[80%]">
                   <Chart
                     options={{
                       ...chartOptions,
@@ -1362,26 +1649,26 @@ export default function Dashboard() {
                   />
                 </div>
               </div>
-              <div className="w-24 sm:w-32">
+              <div className="w-full lg:w-24 xl:w-32">
                 <h4 className="text-xs font-bold text-white mb-2 text-center">
                   حالة المشاريع
                 </h4>
-                <div className="space-y-2 text-xs mb-3">
+                <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 text-xs mb-3">
                   <div className="bg-blue-500/10 rounded p-2 text-center border border-blue-500/20">
-                    <div className="text-blue-400 font-bold">88</div>
-                    <div className="text-blue-400">منتظم</div>
+                    <div className="text-blue-400 font-bold text-sm">88</div>
+                    <div className="text-blue-400 text-[.6rem]">منتظم</div>
                   </div>
                   <div className="bg-green-500/10 rounded p-2 text-center border border-green-500/20">
-                    <div className="text-green-400 font-bold">12</div>
-                    <div className="text-green-400">مكتمل</div>
+                    <div className="text-green-400 font-bold text-sm">12</div>
+                    <div className="text-green-400 text-[.6rem]">مكتمل</div>
                   </div>
                   <div className="bg-yellow-500/10 rounded p-2 text-center border border-yellow-500/20">
-                    <div className="text-yellow-400 font-bold">13</div>
-                    <div className="text-yellow-400">متأخر</div>
+                    <div className="text-yellow-400 font-bold text-sm">13</div>
+                    <div className="text-yellow-400 text-[.6rem]">متأخر</div>
                   </div>
                   <div className="bg-red-500/10 rounded p-2 text-center border border-red-500/20">
-                    <div className="text-red-400 font-bold">5</div>
-                    <div className="text-red-400">متوقف</div>
+                    <div className="text-red-400 font-bold text-sm">5</div>
+                    <div className="text-red-400 text-[.6rem]">متوقف</div>
                   </div>
                 </div>
                 <div className="pt-2 border-t border-white/10 space-y-1 text-[.7rem]">
