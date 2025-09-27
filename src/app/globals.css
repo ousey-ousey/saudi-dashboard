@@ -1,15 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: darkgreen;
+  --color-dark: #0f172a;
+  --primary-gradient: linear-gradient(135deg, #0f172a 0%, #03300f 100%);
+  --color-brand-500: #22c55e;
+  --color-brand-600: #16a34a;
+  --color-grey-50: #f9fafb;
+  --color-grey-100: #f3f4f6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-dark: var(--color-dark);
+  --primary-gradient: var(--primary-gradient);
+  --color-brand-500: var(--color-brand-500);
+  --color-brand-600: var(--color-brand-600);
+  --color-grey-50: var(--color-grey-50);
+  --color-grey-100: var(--color-grey-100);
+  --font-family-sans: "Cairo", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +34,15 @@
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #0f172a;
+  font-family: "Cairo", sans-serif;
+}
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
