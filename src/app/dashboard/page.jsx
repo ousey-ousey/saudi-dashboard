@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProtectedPage from "../../components/auth/ProtectedPage";
-import Chart from "react-apexcharts";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import styled from "styled-components";
+
+// Dynamically import Chart to avoid SSR issues
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import {
   Activity,
   Building,
@@ -111,6 +114,12 @@ const SmallDonutCard = ({ title, series, labels, centerValue, colors }) => (
 );
 
 export default function Dashboard() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const chartOptions = {
     theme: { mode: "dark" },
     chart: {
@@ -317,6 +326,22 @@ export default function Dashboard() {
       ],
     },
   ];
+
+  if (!isClient) {
+    return (
+      <ProtectedPage title="لوحة بيانات المشاريع">
+        <div
+          className="p-2 sm:p-4 lg:p-6 overflow-visible flex items-center justify-center min-h-screen"
+          dir="rtl"
+          style={{
+            background: "linear-gradient(-2deg, #023002, #0f172a)",
+          }}
+        >
+          <div className="text-white text-lg">جاري التحميل...</div>
+        </div>
+      </ProtectedPage>
+    );
+  }
 
   return (
     <ProtectedPage title="لوحة بيانات المشاريع">
