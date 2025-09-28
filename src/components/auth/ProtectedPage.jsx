@@ -48,7 +48,10 @@ export default function ProtectedPage({ children, title = "لوحة التحكم
 
   return (
     <div className="flex h-auto relative">
-      <Sidebar isCollapsed={isSidebarCollapsed} />
+      <Sidebar
+        isCollapsed={isSidebarCollapsed}
+        onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+      />
       <div className="flex-1 flex flex-col">
         <Header
           title={title}

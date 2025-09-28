@@ -530,7 +530,7 @@ export default function Dashboard() {
       >
         {/* Main Grid Container - Matching the original grid structure */}
         <div
-          className="flex flex-col gap-3 sm:gap-4 lg:gap-6 w-full md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
+          className="flex flex-col gap-3  lg:gap-6 w-full md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
           style={{
             gridTemplateAreas: `
               "distripution distripution firstcharts secondcharts thiardcharts timeline"
@@ -543,7 +543,7 @@ export default function Dashboard() {
         >
           {/* Geographical Distribution - distripution */}
           <div
-            className="bg-slate-800 rounded-lg p-3 sm:p-4 border border-gray-700 h-[400px] sm:min-h-[400px]"
+            className="bg-slate-800 flex flex-col gap-3 sm:gap-4 lg:gap-6 rounded-lg p-3 sm:p-4 border border-gray-700 h-[400px] sm:min-h-[400px]"
             style={{
               gridArea: "distripution",
               height: "-webkit-fill-available",

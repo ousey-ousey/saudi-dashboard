@@ -16,9 +16,11 @@ import {
   MdEmail,
   MdStar,
   MdScale,
+  MdMenuOpen,
 } from "react-icons/md";
+import { CiMinimize1 } from "react-icons/ci";
 
-export default function Sidebar({ isCollapsed = true }) {
+export default function Sidebar({ isCollapsed = true, onToggleSidebar }) {
   const router = useRouter();
 
   const [expandedMenus, setExpandedMenus] = useState(() => {
@@ -176,19 +178,24 @@ export default function Sidebar({ isCollapsed = true }) {
       }}
     >
       {/* Logo */}
-      <div className="flex items-center justify-center p-6 border-b border-gray-700 relative">
+      <div className="flex items-center justify-center p-0 border-b border-gray-700 relative">
         {isCollapsed ? (
           <div className="flex flex-col items-center space-y-2">
             <Image
               src="/logo.svg"
               alt="Logo"
-              width={60}
-              height={60}
+              width={100}
+              height={100}
               className=""
+              style={{
+                height: "3.5rem",
+                padding: ".5rem",
+                width: "4.5rem",
+              }}
             />
           </div>
         ) : (
-          <div className="flex flex-col items-center space-y-2">
+          <div className="flex flex-col items-center p-6 space-y-2">
             <Image
               src="/logo.svg"
               alt="Logo"
@@ -199,13 +206,25 @@ export default function Sidebar({ isCollapsed = true }) {
           </div>
         )}
       </div>
-
       {/* Navigation List */}
       <ul
-        className="list-none p-4 m-0 pt-6 space-y-3 flex-1 overflow-y-auto"
+        className="list-none relative p-4 m-0 pt-6 space-y-3 flex-1 overflow-y-auto"
         style={{ overflow: "visible" }}
         dir="rtl"
       >
+        <li>
+          {/* Toggle Button */}
+          <button
+            onClick={onToggleSidebar}
+            className="absolute top-[ 0.5%] left-[-7%] z-50 bg-green-500/80 hover:bg-green-600/80 text-white rounded-md p-2 transition-colors duration-200"
+          >
+            {isCollapsed ? (
+              <MdMenuOpen className="w-4 h-4" />
+            ) : (
+              <CiMinimize1 className="w-4 h-4" />
+            )}
+          </button>
+        </li>
         {/* لوحات البيانات */}
         <li>
           {isCollapsed ? (
